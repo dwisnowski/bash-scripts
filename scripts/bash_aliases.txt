@@ -1,0 +1,4 @@
+alias dbd="diebranchesdie"
+alias npml="npm list --depth=0"
+alias master="git checkout master"
+alias newb="git checkout -b"

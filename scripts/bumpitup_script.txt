@@ -1,0 +1,140 @@
+function bumpitup() {
+        bumpOption=$1
+        if [ "$1" != "major" ] && [ "$1" != "minor" ]
+        then
+                echo 'Yo foo, whatch ya wanna do?!?!'
+                options=("Major 1" "Minor 2" "Patch 3" "Quit")
+                select opt in "${options[@]}"
+                do
+                    case $opt in
+                        "Major 1")
+                            echo "bump, bump, bump it up, Major style!"
+                            bumpOption="major"
+                            break
+                            ;;
+                        "Minor 2")
+                            echo "bump, bump, bump it up, Minor style!"
+                            bumpOption="minor"
+                            break
+                            ;;
+                        "Patch 3")
+                            echo "bump, bump, bump it up, Patch style!"
+                            bumpOption="patch"
+                            break
+                            ;;
+                        "Quit")
+                            echo "Quiter!!"
+                            return
+                            break
+                            ;;
+                        *) echo invalid option;;
+                    esac
+                done
+        fi
+
+        betterunlink || return 1
+
+        readyup || return 1
+
+        doit $bumpOption
+}
+
+function betterunlink() {
+    echo ''
+    echo 'Would you like to unlink npm dependencies automatically?'
+    options=("Unlink All NPM Deps" "Bypass Unlinking")
+    select opt in "${options[@]}"
+    do
+        case $opt in
+            "Unlink All NPM Deps")
+                echo "Going to unlink all npm deps now!"
+                if [ $(npm -v | grep -c '1.4.2') -ne 0 ]
+                then
+                    unlinkall
+                    echo 'Finished unlinking all dependencies.'
+                    return 0
+                else
+                    echo 'Your version of npm wont work with unlinkall script.'
+                    echo 'Please unlink all deps manually.'
+                    return 1
+                fi
+                break
+                ;;
+            "Bypass Unlinking")
+                echo "Skipping unlinkall script"
+                return 0
+                break
+                ;;
+            *) echo invalid option;;
+        esac
+    done
+}
+
+function readyup() {
+    echo ''
+    echo 'You take the blue pill, the story ends.'
+    echo 'You wake up in your bed and believe whatever you want to believe.'
+    echo 'You take the red pill, you stay in Wonderland,'
+    echo 'and I show you how deep the rabbit hole goes.'
+    echo ''
+    options=("Blue pill" "Red pill <Take it!>")
+    select opt in "${options[@]}"
+    do
+        case $opt in
+            "Blue pill")
+                return 1
+                break
+                ;;
+            "Red pill <Take it!>")
+                echo "                                 "
+                echo "                          .|.    "
+                echo "                         /  |    "
+                echo "                        /  /     "
+                echo "                       / ,|      "
+                echo "           .-------.--- /        "
+                echo "          |._ __.-/ o. o\        "
+                echo "                 (    Y  )       "
+                echo "                  )     /        "
+                echo "                 /     (         "
+                echo "                /       Y        "
+                echo "            .-|         |        "
+                echo "           /  _     \    \       "
+                echo "          /    |. |. ) /| )      "
+                echo "         Y       )( / /(,/       "
+                echo "        ,|      /     )          "
+                echo "       ( |     /     /           "
+                echo "        \` \_  (__   (__          "
+                echo "            \`-._,)--._,)         "
+                echo "                                 "
+                echo "Down the hole we go!"
+                break
+                ;;
+            *) echo invalid option;;
+        esac
+    done
+
+    return 0
+}
+
+function doit(){
+    bumpOption=$1
+    git checkout master
+    update
+    diebranchesdie
+    npm prune
+    if [ $(npm i | grep -c 'npm ERR!') -ne 0 ]
+    then
+            if [ $(npm i | grep -c 'npm ERR!') -ne 0 ]
+            then
+                    echo 'Failed to grab all Deps'
+                    echo 're-run or npm i to resolve issue.'
+
+            else
+                gulp bump:$bumpOption
+                echo 'Finished bumping!'
+            fi
+    else
+        gulp bump:$bumpOption
+        echo 'Finished bumping!'
+    fi
+}

@@ -1,0 +1,5 @@
+source /c/bench/intellij-live-templates/scripts/bash_aliases.txt
+source /c/bench/intellij-live-templates/scripts/linkem_scripts.txt
+source /c/bench/intellij-live-templates/scripts/diebranchesdie_script.txt
+source /c/bench/intellij-live-templates/scripts/update_script.txt
+source /c/bench/intellij-live-templates/scripts/bumpitup_script.txt

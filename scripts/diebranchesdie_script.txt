@@ -1,0 +1,7 @@
+function diebranchesdie() {
+        echo 'going to kill all branches that are synced up with master'
+        git checkout master
+        git branch --merged | grep -v 'master' |  xargs git branch -d $1
+        git fetch
+        git remote prune origin
+}

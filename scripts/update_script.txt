@@ -1,0 +1,30 @@
+function updateremote() {
+        echo 'Updating your project... Sit back and watch me go !!!'
+        git fetch upstream
+        branchName="$(git rev-parse --symbolic-full-name --abbrev-ref HEAD;)"
+        git checkout master
+        git rebase upstream/master
+        git push origin master
+        git checkout $branchName
+        git rebase master
+}
+
+function updatelocal() {
+        echo 'Updating your project... Sit back and watch me go !!!'
+        git fetch
+        branchName="$(git rev-parse --symbolic-full-name --abbrev-ref HEAD;)"
+        git checkout master
+        git pull -r
+        git checkout $branchName
+        git rebase master
+}
+
+function update() {
+        remoteLineCount=`git remote -v | sed -e 's/\s.*$//' | wc -l`
+        if [[ $remoteLineCount -gt 2 ]]
+        then
+                updateremote
+        else
+                updatelocal
+        fi
+}
